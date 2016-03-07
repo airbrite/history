@@ -25,7 +25,12 @@ const createBrowserHistory = (options = {}) => {
   const isSupported = supportsHistory()
   const useRefresh = !isSupported || forceRefresh
 
-  const getCurrentLocation = (historyState = window.history.state) => {
+  const getCurrentLocation = (historyState) => {
+    try {
+      // Catch `Unspecified error` when used in IE iframe
+      historyState = historyState || window.history.state || {}
+    } catch (err) {}
+
     const path = getWindowPath()
     let key = historyState && historyState.key
 
